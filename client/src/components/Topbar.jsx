@@ -12,56 +12,110 @@ export default function Topbar({ activeTab, setActiveTab }) {
     return () => clearInterval(t);
   }, []);
 
-  const tabs = ['MAP', 'NODES', 'REPORTS', 'ADMIN'];
+  const tabs = [
+    { id: 'MAP', icon: 'map', label: 'Map' },
+    { id: 'NODES', icon: 'hub', label: 'Nodes' },
+    { id: 'REPORTS', icon: 'flag', label: 'Reports' },
+    { id: 'ADMIN', icon: 'admin_panel_settings', label: 'Admin' },
+  ];
 
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      height: '48px', padding: '0 20px',
-      background: 'var(--surface)', borderBottom: '1px solid var(--border)',
+      height: 56, padding: '0 24px',
+      background: 'var(--surface)',
+      borderBottom: '1px solid var(--border)',
       position: 'relative', zIndex: 1000, flexShrink: 0,
+      backdropFilter: 'blur(20px)',
     }}>
       {/* Brand */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <div style={{
-          width: 8, height: 8, borderRadius: '50%',
-          background: 'var(--green)',
-          boxShadow: '0 0 8px var(--green)',
-          animation: 'pulse-glow 2s infinite',
-        }} />
-        <span style={{
-          fontFamily: 'var(--font-head)', fontSize: 14, letterSpacing: 3,
-          color: 'var(--cyan)', fontWeight: 700,
-        }}>SMART ROUTE PLANNER</span>
-        <span style={{ color: 'var(--text-dim)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>
-          // DELHI NCR
-        </span>
+          width: 36, height: 36, borderRadius: 'var(--radius-sm)',
+          background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 20px var(--primary-soft)',
+        }}>
+          <span className="material-icons-round" style={{ fontSize: 20, color: '#fff' }}>route</span>
+        </div>
+        <div>
+          <div style={{
+            fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700,
+            color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.1,
+          }}>Smart Route</div>
+          <div style={{
+            fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)',
+            fontWeight: 500, letterSpacing: '0.05em',
+          }}>Delhi NCR</div>
+        </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 2 }}>
+      <div style={{
+        display: 'flex', gap: 4,
+        background: 'var(--bg)', borderRadius: 'var(--radius-md)',
+        padding: 4,
+      }}>
         {tabs.map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)} style={{
-            background: activeTab === tab ? 'var(--border)' : 'transparent',
-            border: 'none', borderBottom: activeTab === tab ? '2px solid var(--cyan)' : '2px solid transparent',
-            color: activeTab === tab ? 'var(--cyan)' : 'var(--text-dim)',
-            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 2,
-            padding: '0 16px', height: '48px', cursor: 'pointer', transition: 'all 0.15s',
-          }}>
-            {tab}
+          <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+            background: activeTab === tab.id
+              ? 'linear-gradient(135deg, var(--primary), var(--secondary))'
+              : 'transparent',
+            border: 'none', borderRadius: 'var(--radius-sm)',
+            color: activeTab === tab.id ? '#fff' : 'var(--text-muted)',
+            fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600,
+            padding: '8px 16px', cursor: 'pointer',
+            transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+            display: 'flex', alignItems: 'center', gap: 6,
+            boxShadow: activeTab === tab.id ? '0 2px 12px var(--primary-soft)' : 'none',
+          }}
+          onMouseEnter={e => {
+            if (activeTab !== tab.id) {
+              e.currentTarget.style.background = 'var(--surface-hover)';
+              e.currentTarget.style.color = 'var(--text)';
+            }
+          }}
+          onMouseLeave={e => {
+            if (activeTab !== tab.id) {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }
+          }}
+          >
+            <span className="material-icons-round" style={{ fontSize: 16 }}>{tab.icon}</span>
+            {tab.label}
           </button>
         ))}
       </div>
 
       {/* Status */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontFamily: 'var(--font-mono)', fontSize: 11 }}>
-        <span style={{ color: 'var(--text-dim)' }}>LAT <span style={{ color: 'var(--green)' }}>{latency}ms</span></span>
-        <span style={{ color: 'var(--text-dim)' }}>{time.toLocaleTimeString('en-IN', { hour12: false })}</span>
-        <span style={{
-          background: '#001a0a', border: '1px solid var(--green)',
-          color: 'var(--green)', fontSize: 9, letterSpacing: 2,
-          padding: '3px 8px', borderRadius: 2,
-        }}>SYSTEM ONLINE</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)',
+        }}>
+          <span className="material-icons-round" style={{ fontSize: 14, color: 'var(--success)' }}>speed</span>
+          <span style={{ color: 'var(--success)', fontWeight: 600 }}>{latency}ms</span>
+        </div>
+        <div style={{
+          fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)',
+        }}>
+          {time.toLocaleTimeString('en-IN', { hour12: false })}
+        </div>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          background: 'var(--success-soft)',
+          color: 'var(--success)', fontSize: 11, fontWeight: 600,
+          fontFamily: 'var(--font-sans)',
+          padding: '5px 12px', borderRadius: 'var(--radius-xl)',
+        }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: 'var(--success)',
+            animation: 'pulse 2s ease-in-out infinite',
+          }} />
+          Online
+        </div>
       </div>
     </div>
   );

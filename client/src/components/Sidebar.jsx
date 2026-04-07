@@ -1,101 +1,173 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const algorithms = [
-  { id: 'dijkstra', label: 'Dijkstra', badge: 'GUARANTEED', color: 'var(--cyan)' },
-  { id: 'astar', label: 'A* Star', badge: 'OPTIMIZED', color: 'var(--orange)' },
-  { id: 'compare', label: 'Compare', badge: 'DUAL', color: 'var(--green)' },
+  { id: 'dijkstra', label: 'Dijkstra', desc: 'Guaranteed optimal path', icon: 'verified', color: 'var(--info)', bg: 'var(--info-soft)' },
+  { id: 'astar', label: 'A* Star', desc: 'Heuristic optimized', icon: 'bolt', color: 'var(--accent)', bg: 'var(--accent-soft)' },
+  { id: 'compare', label: 'Compare', desc: 'Dual algorithm analysis', icon: 'compare_arrows', color: 'var(--success)', bg: 'var(--success-soft)' },
 ];
 
 const preferences = [
-  { id: 'fastest', label: '⚡ FASTEST' },
-  { id: 'safest', label: '🛡 SAFEST' },
-  { id: 'fuel', label: '⛽ FUEL EFF.' },
+  { id: 'fastest', label: 'Fastest', icon: 'flash_on', desc: 'Minimize travel time' },
+  { id: 'safest', label: 'Safest', icon: 'shield', desc: 'Prioritize safety' },
+  { id: 'fuel', label: 'Fuel Efficient', icon: 'eco', desc: 'Low fuel consumption' },
 ];
 
 export default function Sidebar({ preference, setPreference, onCompute, loading, result }) {
+  const [hoveredPref, setHoveredPref] = useState(null);
+
   return (
     <div style={{
-      width: 220, background: 'var(--surface)', borderRight: '1px solid var(--border)',
+      width: 260, background: 'var(--surface)', borderRight: '1px solid var(--border)',
       display: 'flex', flexDirection: 'column', flexShrink: 0,
-      animation: 'slide-in-left 0.4s ease',
+      animation: 'slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
     }}>
-      {/* Section: Algorithms */}
-      <div style={{ padding: '16px 16px 8px', borderBottom: '1px solid var(--border)' }}>
+      {/* Algorithms Section */}
+      <div style={{ padding: 20, borderBottom: '1px solid var(--border)' }}>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: 3,
-          color: 'var(--text-dim)', marginBottom: 12,
-        }}>// ALGORITHM ENGINE</div>
-        {algorithms.map(algo => (
-          <div key={algo.id} style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '8px 10px', marginBottom: 4,
-            background: 'var(--surface2)', border: `1px solid var(--border)`,
-            borderRadius: 3, cursor: 'default',
-          }}>
-            <span style={{ fontFamily: 'var(--font-ui)', fontWeight: 600, fontSize: 13, color: algo.color }}>
-              {algo.label}
-            </span>
-            <span style={{
-              fontSize: 8, letterSpacing: 1, fontFamily: 'var(--font-mono)',
-              background: 'transparent', border: `1px solid ${algo.color}`,
-              color: algo.color, padding: '2px 5px', borderRadius: 2,
-            }}>{algo.badge}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Section: Optimization Mode */}
-      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
-        <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: 3,
-          color: 'var(--text-dim)', marginBottom: 10,
-        }}>// WEIGHT MODE</div>
-        {preferences.map(p => (
-          <button key={p.id} onClick={() => setPreference(p.id)} style={{
-            width: '100%', marginBottom: 6,
-            padding: '8px 12px', textAlign: 'left',
-            background: preference === p.id ? 'rgba(0,212,255,0.08)' : 'transparent',
-            border: `1px solid ${preference === p.id ? 'var(--cyan)' : 'var(--border)'}`,
-            borderRadius: 3, color: preference === p.id ? 'var(--cyan)' : 'var(--text-dim)',
-            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1,
-            cursor: 'pointer', transition: 'all 0.15s',
-          }}>
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Stats from last result */}
-      {result && (
-        <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', animation: 'fade-in 0.3s ease' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: 3, color: 'var(--text-dim)', marginBottom: 10 }}>
-            // LAST RESULT
-          </div>
-          {[
-            { label: 'Dijkstra nodes', value: result.dijkstra.nodesExplored, color: 'var(--cyan)' },
-            { label: 'A* nodes', value: result.astar.nodesExplored, color: 'var(--orange)' },
-            { label: 'Efficiency gain', value: `${Math.round((1 - result.astar.nodesExplored / result.dijkstra.nodesExplored) * 100)}%`, color: 'var(--green)' },
-          ].map(s => (
-            <div key={s.label} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)' }}>{s.label}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: s.color, fontWeight: 700 }}>{s.value}</span>
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          color: 'var(--text-muted)', textTransform: 'uppercase',
+          letterSpacing: '0.1em', marginBottom: 14,
+        }}>Algorithms</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {algorithms.map(algo => (
+            <div key={algo.id} style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              padding: '12px 14px',
+              background: algo.bg, borderRadius: 'var(--radius-sm)',
+              transition: 'all 0.2s ease',
+              cursor: 'default',
+            }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 'var(--radius-sm)',
+                background: `${algo.color}22`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <span className="material-icons-round" style={{ fontSize: 18, color: algo.color }}>{algo.icon}</span>
+              </div>
+              <div>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>
+                  {algo.label}
+                </div>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--text-muted)' }}>
+                  {algo.desc}
+                </div>
+              </div>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Optimization Mode */}
+      <div style={{ padding: 20, borderBottom: '1px solid var(--border)' }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          color: 'var(--text-muted)', textTransform: 'uppercase',
+          letterSpacing: '0.1em', marginBottom: 14,
+        }}>Optimization</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {preferences.map(p => {
+            const isActive = preference === p.id;
+            const isHovered = hoveredPref === p.id;
+            return (
+              <button
+                key={p.id}
+                onClick={() => setPreference(p.id)}
+                onMouseEnter={() => setHoveredPref(p.id)}
+                onMouseLeave={() => setHoveredPref(null)}
+                style={{
+                  width: '100%', padding: '12px 14px',
+                  textAlign: 'left', display: 'flex', alignItems: 'center', gap: 12,
+                  background: isActive
+                    ? 'var(--primary-soft)'
+                    : isHovered ? 'var(--surface-hover)' : 'transparent',
+                  border: `1px solid ${isActive ? 'rgba(139,92,246,0.3)' : 'transparent'}`,
+                  borderRadius: 'var(--radius-sm)',
+                  color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                  fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 500,
+                  cursor: 'pointer', transition: 'all 0.2s ease',
+                }}
+              >
+                <span className="material-icons-round" style={{
+                  fontSize: 18,
+                  color: isActive ? 'var(--primary)' : 'var(--text-muted)',
+                }}>{p.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 13 }}>{p.label}</div>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 400 }}>{p.desc}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Results Snapshot */}
+      {result && (
+        <div style={{
+          padding: 20, borderBottom: '1px solid var(--border)',
+          animation: 'fadeIn 0.4s ease',
+        }}>
+          <div style={{
+            fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+            color: 'var(--text-muted)', textTransform: 'uppercase',
+            letterSpacing: '0.1em', marginBottom: 14,
+          }}>Last Result</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              { label: 'Dijkstra explored', value: result.dijkstra.nodesExplored, color: 'var(--info)' },
+              { label: 'A* explored', value: result.astar.nodesExplored, color: 'var(--accent)' },
+              {
+                label: 'A* efficiency gain',
+                value: `${Math.round((1 - result.astar.nodesExplored / result.dijkstra.nodesExplored) * 100)}%`,
+                color: 'var(--success)',
+              },
+            ].map(s => (
+              <div key={s.label} style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--text-muted)' }}>{s.label}</span>
+                <span style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 13, color: s.color, fontWeight: 700,
+                  background: `${s.color}15`,
+                  padding: '2px 8px', borderRadius: 'var(--radius-sm)',
+                }}>{s.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
-      {/* Spacer + Compute Button */}
+      {/* Spacer + Compute */}
       <div style={{ flex: 1 }} />
-      <div style={{ padding: 16 }}>
-        <button onClick={onCompute} disabled={loading} style={{
-          width: '100%', padding: '12px 0',
-          background: loading ? 'var(--border)' : 'linear-gradient(135deg, var(--cyan), var(--cyan-dim))',
-          border: 'none', borderRadius: 3,
-          color: '#000', fontFamily: 'var(--font-head)', fontSize: 11,
-          fontWeight: 700, letterSpacing: 3, cursor: loading ? 'not-allowed' : 'pointer',
-          transition: 'all 0.2s', boxShadow: loading ? 'none' : '0 0 20px rgba(0,212,255,0.3)',
-        }}>
-          {loading ? 'COMPUTING...' : 'SYNTHESIZE ROUTE'}
+      <div style={{ padding: 20 }}>
+        <button
+          onClick={onCompute}
+          disabled={loading}
+          style={{
+            width: '100%', padding: '14px 0',
+            background: loading
+              ? 'var(--surface-hover)'
+              : 'linear-gradient(135deg, var(--primary), var(--secondary))',
+            border: 'none', borderRadius: 'var(--radius-md)',
+            color: loading ? 'var(--text-muted)' : '#fff',
+            fontFamily: 'var(--font-display)', fontSize: 14,
+            fontWeight: 700, letterSpacing: '0.02em',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: loading ? 'none' : '0 4px 20px var(--primary-soft)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          }}
+          onMouseEnter={e => {
+            if (!loading) e.currentTarget.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <span className="material-icons-round" style={{ fontSize: 18 }}>
+            {loading ? 'hourglass_top' : 'play_arrow'}
+          </span>
+          {loading ? 'Computing...' : 'Find Route'}
         </button>
       </div>
     </div>
