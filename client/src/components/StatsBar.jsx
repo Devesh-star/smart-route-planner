@@ -1,64 +1,35 @@
 import React from 'react';
 
-function StatCard({ title, icon, badgeColor, stats, pathNames }) {
+function StatCard({ title, badge, badgeColor, stats, pathNames }) {
   return (
     <div style={{
       flex: 1,
       background: 'var(--surface2)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius-md)',
-      padding: '16px 18px',
-      animation: 'slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-      position: 'relative',
-      overflow: 'hidden',
+      border: `1px solid var(--border)`,
+      borderTop: `2px solid ${badgeColor}`,
+      borderRadius: 3,
+      padding: '10px 14px',
+      animation: 'fade-in 0.4s ease',
     }}>
-      {/* Subtle top gradient accent */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-        background: `linear-gradient(90deg, ${badgeColor}, transparent)`,
-        borderRadius: 'var(--radius-md) var(--radius-md) 0 0',
-      }} />
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 'var(--radius-sm)',
-            background: `${badgeColor}18`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <span className="material-icons-round" style={{ fontSize: 16, color: badgeColor }}>{icon}</span>
-          </div>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontSize: 14, color: 'var(--text)',
-            fontWeight: 700,
-          }}>{title}</span>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <span style={{ fontFamily: 'var(--font-head)', fontSize: 12, color: badgeColor, letterSpacing: 2 }}>{title}</span>
+        <span style={{
+          fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: 1,
+          border: `1px solid ${badgeColor}`, color: badgeColor,
+          padding: '2px 6px', borderRadius: 2,
+        }}>{badge}</span>
       </div>
-
-      <div style={{ display: 'flex', gap: 20, marginBottom: 8 }}>
+      <div style={{ display: 'flex', gap: 20, marginBottom: 6 }}>
         {stats.map(s => (
           <div key={s.label}>
-            <div style={{
-              fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--text-muted)',
-              textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4,
-            }}>{s.label}</div>
-            <div style={{
-              fontFamily: 'var(--font-mono)', fontSize: 18, color: badgeColor,
-              fontWeight: 700, lineHeight: 1,
-            }}>{s.value}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', marginBottom: 2 }}>{s.label}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: badgeColor, fontWeight: 700 }}>{s.value}</div>
           </div>
         ))}
       </div>
-
       {pathNames && (
-        <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-muted)',
-          marginTop: 6, lineHeight: 1.5,
-          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-          background: 'var(--bg)', padding: '6px 10px',
-          borderRadius: 'var(--radius-sm)',
-        }}>
-          <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Path:</span> {pathNames}
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)', marginTop: 4, lineHeight: 1.6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          PATH: {pathNames}
         </div>
       )}
     </div>
@@ -71,15 +42,9 @@ export default function StatsBar({ result, nodes }) {
       height: 80, background: 'var(--surface)', borderTop: '1px solid var(--border)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span className="material-icons-round" style={{ fontSize: 20, color: 'var(--text-muted)' }}>info_outline</span>
-        <span style={{
-          fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--text-muted)',
-          fontWeight: 500,
-        }}>
-          Select nodes and click "Find Route" to see statistics
-        </span>
-      </div>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)', letterSpacing: 3 }}>
+        // SELECT NODES AND SYNTHESIZE ROUTE TO SEE STATS
+      </span>
     </div>
   );
 
@@ -94,83 +59,50 @@ export default function StatsBar({ result, nodes }) {
 
   return (
     <div style={{
-      minHeight: 110, background: 'var(--surface)', borderTop: '1px solid var(--border)',
-      display: 'flex', alignItems: 'stretch', gap: 12, padding: '12px 16px', flexShrink: 0,
+      height: 100, background: 'var(--surface)', borderTop: '1px solid var(--border)',
+      display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', flexShrink: 0,
     }}>
       <StatCard
-        title="Dijkstra"
-        icon="verified"
-        badgeColor="var(--info)"
+        title="DIJKSTRA"
+        badge="GUARANTEED OPTIMAL"
+        badgeColor="var(--cyan)"
         stats={[
-          { label: 'Explored', value: result.dijkstra.nodesExplored },
-          { label: 'Cost', value: fmtCost(result.dijkstra.cost) },
-          { label: 'Hops', value: result.dijkstra.path.length },
+          { label: 'NODES EXPLORED', value: result.dijkstra.nodesExplored },
+          { label: 'ROUTE COST', value: fmtCost(result.dijkstra.cost) },
+          { label: 'HOPS', value: result.dijkstra.path.length },
         ]}
         pathNames={fmtPath(result.dijkstra.path)}
       />
 
       <StatCard
-        title="A* Star"
-        icon="bolt"
-        badgeColor="var(--accent)"
+        title="A* STAR"
+        badge="HEURISTIC OPTIMIZED"
+        badgeColor="var(--orange)"
         stats={[
-          { label: 'Explored', value: result.astar.nodesExplored },
-          { label: 'Cost', value: fmtCost(result.astar.cost) },
-          { label: 'Hops', value: result.astar.path.length },
+          { label: 'NODES EXPLORED', value: result.astar.nodesExplored },
+          { label: 'ROUTE COST', value: fmtCost(result.astar.cost) },
+          { label: 'HOPS', value: result.astar.path.length },
         ]}
         pathNames={fmtPath(result.astar.path)}
       />
 
-      {/* Analysis Card */}
+      {/* Comparative */}
       <div style={{
-        width: 220, background: 'var(--surface2)',
-        border: '1px solid var(--border)', borderRadius: 'var(--radius-md)',
-        padding: '16px 18px', flexShrink: 0,
-        animation: 'slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-        position: 'relative', overflow: 'hidden',
+        width: 180, background: 'var(--surface2)',
+        border: '1px solid var(--border)', borderTop: '2px solid var(--green)',
+        borderRadius: 3, padding: '10px 14px', flexShrink: 0,
       }}>
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-          background: 'linear-gradient(90deg, var(--success), transparent)',
-          borderRadius: 'var(--radius-md) var(--radius-md) 0 0',
-        }} />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 'var(--radius-sm)',
-            background: 'var(--success-soft)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <span className="material-icons-round" style={{ fontSize: 16, color: 'var(--success)' }}>analytics</span>
+        <div style={{ fontFamily: 'var(--font-head)', fontSize: 11, color: 'var(--green)', letterSpacing: 2, marginBottom: 8 }}>ANALYSIS</div>
+        <div style={{ marginBottom: 6 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)' }}>A* EFFICIENCY</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--green)' }}>{effGain}%</span>
           </div>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontSize: 14, color: 'var(--text)',
-            fontWeight: 700,
-          }}>Analysis</span>
-        </div>
-
-        <div style={{ marginBottom: 10 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--text-muted)' }}>A* Efficiency</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--success)', fontWeight: 700 }}>{effGain}%</span>
-          </div>
-          <div style={{
-            height: 6, background: 'var(--bg)',
-            borderRadius: 'var(--radius-xl)', overflow: 'hidden',
-          }}>
-            <div style={{
-              height: '100%', width: `${Math.max(0, effGain)}%`,
-              background: 'linear-gradient(90deg, var(--success), var(--primary))',
-              borderRadius: 'var(--radius-xl)',
-              transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: '0 0 8px var(--success-soft)',
-            }} />
+          <div style={{ height: 4, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${Math.max(0, effGain)}%`, background: 'var(--green)', borderRadius: 2, transition: 'width 0.6s ease' }} />
           </div>
         </div>
-
-        <div style={{
-          fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.4,
-        }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)' }}>
           {effGain > 0
             ? `A* explored ${result.dijkstra.nodesExplored - result.astar.nodesExplored} fewer nodes`
             : 'Both algorithms equal on this path'}

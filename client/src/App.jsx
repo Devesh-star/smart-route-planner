@@ -40,50 +40,17 @@ export default function App() {
     setLoading(false);
   };
 
-  // Auto-dismiss errors
-  useEffect(() => {
-    if (error) {
-      const t = setTimeout(() => setError(''), 5000);
-      return () => clearTimeout(t);
-    }
-  }, [error]);
-
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column',
-      height: '100vh', width: '100vw', overflow: 'hidden',
-      background: 'var(--bg)',
-    }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', overflow: 'hidden' }}>
       <Topbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Error Toast */}
       {error && (
         <div style={{
-          position: 'fixed', top: 72, left: '50%', transform: 'translateX(-50%)',
-          zIndex: 9999,
-          background: 'var(--danger-soft)',
-          border: '1px solid rgba(248,113,113,0.3)',
-          backdropFilter: 'blur(12px)',
-          color: 'var(--danger)',
-          fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 500,
-          padding: '12px 20px', borderRadius: 'var(--radius-md)',
-          boxShadow: 'var(--shadow-lg)',
-          animation: 'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex', alignItems: 'center', gap: 10,
-          maxWidth: 500,
+          background: 'rgba(255,51,85,0.1)', border: '1px solid var(--danger)',
+          color: 'var(--danger)', fontFamily: 'var(--font-mono)', fontSize: 11,
+          padding: '8px 20px', letterSpacing: 1, flexShrink: 0,
         }}>
-          <span className="material-icons-round" style={{ fontSize: 18 }}>error_outline</span>
-          {error}
-          <button
-            onClick={() => setError('')}
-            style={{
-              background: 'none', border: 'none', color: 'var(--danger)',
-              cursor: 'pointer', padding: 4, marginLeft: 8,
-              display: 'flex', alignItems: 'center',
-            }}
-          >
-            <span className="material-icons-round" style={{ fontSize: 16 }}>close</span>
-          </button>
+          ⚠ {error}
         </div>
       )}
 
@@ -100,10 +67,7 @@ export default function App() {
         )}
 
         {/* Main content */}
-        <div style={{
-          flex: 1, display: 'flex', flexDirection: 'column',
-          position: 'relative', overflow: 'hidden',
-        }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
           {activeTab === 'MAP' && (
             <>
               <div style={{ flex: 1, position: 'relative' }}>
