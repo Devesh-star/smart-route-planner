@@ -1,0 +1,62 @@
+:root {
+  --bg: #050a0f;
+  --surface: #0a1520;
+  --surface2: #0f1e2e;
+  --border: #1a3a5c;
+  --cyan: #00d4ff;
+  --cyan-dim: #0099bb;
+  --orange: #ff6b35;
+  --orange-dim: #cc4a1a;
+  --green: #00ff88;
+  --green-dim: #00cc66;
+  --text: #c8e6f5;
+  --text-dim: #6a9ab8;
+  --danger: #ff3355;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui: 'Rajdhani', sans-serif;
+  --font-head: 'Orbitron', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  overflow: hidden;
+}
+
+/* Leaflet overrides */
+.leaflet-container { background: #050a0f !important; }
+.leaflet-control-zoom a {
+  background: var(--surface2) !important;
+  color: var(--cyan) !important;
+  border-color: var(--border) !important;
+  font-family: var(--font-mono) !important;
+}
+.leaflet-control-zoom a:hover { background: var(--border) !important; }
+.leaflet-control-attribution { display: none !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}

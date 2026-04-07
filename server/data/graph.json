@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    { "id": "CP", "name": "Connaught Place", "lat": 28.6315, "lng": 77.2167 },
+    { "id": "INA", "name": "INA Market", "lat": 28.5741, "lng": 77.2080 },
+    { "id": "AIIMS", "name": "AIIMS", "lat": 28.5672, "lng": 77.2100 },
+    { "id": "HKV", "name": "Hauz Khas Village", "lat": 28.5535, "lng": 77.2010 },
+    { "id": "IGI", "name": "IGI Airport", "lat": 28.5562, "lng": 77.1000 },
+    { "id": "DWK", "name": "Dwarka Sec-21", "lat": 28.5700, "lng": 77.0500 },
+    { "id": "KNG", "name": "Karol Bagh", "lat": 28.6520, "lng": 77.1900 },
+    { "id": "OLD", "name": "Old Delhi", "lat": 28.6600, "lng": 77.2300 },
+    { "id": "NZD", "name": "Nizamuddin", "lat": 28.5900, "lng": 77.2500 },
+    { "id": "NSP", "name": "Netaji Subhash Place", "lat": 28.6940, "lng": 77.1540 },
+    { "id": "VKB", "name": "Vikaspuri", "lat": 28.6340, "lng": 77.0720 },
+    { "id": "LJN", "name": "Lajpat Nagar", "lat": 28.5700, "lng": 77.2430 }
+  ],
+  "edges": [
+    { "from": "CP", "to": "KNG", "distance": 3.2, "traffic": 0.7, "safety": 0.9 },
+    { "from": "CP", "to": "OLD", "distance": 4.1, "traffic": 0.8, "safety": 0.7 },
+    { "from": "CP", "to": "INA", "distance": 5.8, "traffic": 0.5, "safety": 0.85 },
+    { "from": "CP", "to": "NZD", "distance": 6.2, "traffic": 0.6, "safety": 0.8 },
+    { "from": "KNG", "to": "NSP", "distance": 5.1, "traffic": 0.6, "safety": 0.85 },
+    { "from": "KNG", "to": "VKB", "distance": 7.3, "traffic": 0.4, "safety": 0.8 },
+    { "from": "KNG", "to": "OLD", "distance": 2.8, "traffic": 0.9, "safety": 0.65 },
+    { "from": "OLD", "to": "NSP", "distance": 6.5, "traffic": 0.7, "safety": 0.7 },
+    { "from": "INA", "to": "AIIMS", "distance": 1.5, "traffic": 0.6, "safety": 0.9 },
+    { "from": "INA", "to": "HKV", "distance": 2.3, "traffic": 0.4, "safety": 0.88 },
+    { "from": "INA", "to": "LJN", "distance": 3.1, "traffic": 0.5, "safety": 0.85 },
+    { "from": "AIIMS", "to": "HKV", "distance": 2.1, "traffic": 0.45, "safety": 0.9 },
+    { "from": "AIIMS", "to": "NZD", "distance": 3.8, "traffic": 0.55, "safety": 0.82 },
+    { "from": "HKV", "to": "IGI", "distance": 10.2, "traffic": 0.35, "safety": 0.78 },
+    { "from": "HKV", "to": "DWK", "distance": 12.5, "traffic": 0.3, "safety": 0.75 },
+    { "from": "IGI", "to": "DWK", "distance": 5.8, "traffic": 0.4, "safety": 0.88 },
+    { "from": "DWK", "to": "VKB", "distance": 6.2, "traffic": 0.35, "safety": 0.82 },
+    { "from": "VKB", "to": "NSP", "distance": 8.1, "traffic": 0.45, "safety": 0.8 },
+    { "from": "NSP", "to": "OLD", "distance": 6.5, "traffic": 0.65, "safety": 0.72 },
+    { "from": "NZD", "to": "LJN", "distance": 2.4, "traffic": 0.5, "safety": 0.85 },
+    { "from": "LJN", "to": "AIIMS", "distance": 3.2, "traffic": 0.55, "safety": 0.87 }
+  ]
+}
